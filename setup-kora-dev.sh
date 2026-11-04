@@ -218,7 +218,7 @@ koraRepos=(
 
 standaloneRepos=(
   kora_queue kora_chat PolyZone kora_voice kora_theme kora_emotemenu
-  kora_lib-playground props kora_sound
+  kora_lib-playground props kora_sound kora_phoneshop_demo
 )
 
 # --- directory layout ---
