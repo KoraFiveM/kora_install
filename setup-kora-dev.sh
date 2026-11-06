@@ -22,6 +22,9 @@ minimumFreeKb=5242880 # 5 GiB
 # Temporary paths are tracked so they can be removed on both success and failure.
 temporaryPaths=()
 
+# The MySQL password may be empty (common for local dev databases).
+dbPass=""
+
 die() {
   printf 'ERROR: %s\n' "$*" >&2
   exit 1
@@ -331,15 +334,22 @@ dbName="${dbName:-kora_dev}"
 read -r -p "MySQL user [root]: " dbUser
 dbUser="${dbUser:-root}"
 
-read_mysql_password() {
-  while true; do
-    read -r -s -p "MySQL password: " dbPass
-    printf '\n'
+# Runs the mysql client against the local server. An empty password is sent as
+# "no password" instead of an empty MYSQL_PWD value.
+mysqlCmd() {
+  if [[ -n "$dbPass" ]]; then
+    MYSQL_PWD="$dbPass" mysql -u"$dbUser" -h127.0.0.1 "$@"
+  else
+    env -u MYSQL_PWD mysql -u"$dbUser" -h127.0.0.1 "$@"
+  fi
+}
 
-    [[ -n "$dbPass" ]] || {
-      printf 'MySQL password cannot be empty. Please try again.\n'
-      continue
-    }
+read_mysql_password() {
+  local attempt
+
+  for (( attempt=1; attempt<=3; attempt++ )); do
+    read -r -s -p "MySQL password (leave blank if none): " dbPass
+    printf '\n'
 
     [[ "$dbPass" != *$'\n'* && "$dbPass" != *$'\r'* ]] \
       || die "MySQL password cannot contain newline characters."
@@ -348,12 +358,10 @@ read_mysql_password() {
       return 0
     fi
 
-    printf 'Incorrect password. Please try again.\n'
+    printf "Could not log in as '%s' (attempt %s/3). Check the password, or press Enter if the account has none.\n" "$dbUser" "$attempt"
   done
-}
 
-mysqlCmd() {
-  MYSQL_PWD="$dbPass" mysql -u"$dbUser" -h127.0.0.1 "$@"
+  die "Could not log in to MySQL as '$dbUser' after 3 attempts."
 }
 
 read_mysql_password
@@ -550,7 +558,12 @@ urlenc() {
   printf '%s' "$output"
 }
 
-credentialString="$(urlenc "$dbUser"):$(urlenc "$dbPass")"
+# With an empty password the connection string omits the ":password" part.
+if [[ -n "$dbPass" ]]; then
+  credentialString="$(urlenc "$dbUser"):$(urlenc "$dbPass")"
+else
+  credentialString="$(urlenc "$dbUser")"
+fi
 connectionString="mysql://$credentialString@127.0.0.1/$dbName?charset=utf8mb4"
 
 if grep -qE '^[[:space:]]*set[[:space:]]+mysql_connection_string' server.cfg; then
@@ -670,13 +683,14 @@ if [[ "$os" == "linux" ]]; then
     "TXHOST_DEFAULT_DBHOST=127.0.0.1"
     "TXHOST_DEFAULT_DBPORT=3306"
     "TXHOST_DEFAULT_DBUSER=$dbUser"
-    "TXHOST_DEFAULT_DBPASS=$dbPass"
     "TXHOST_DEFAULT_DBNAME=$dbName"
     "TXHOST_TXA_PORT=$txPort"
     "TXHOST_FXS_PORT=$gamePort"
     "TXHOST_GAME_NAME=fivem"
   )
 
+  # Only set a database password when there is one.
+  [[ -n "$dbPass" ]] && envLines+=("TXHOST_DEFAULT_DBPASS=$dbPass")
   [[ -n "$adminName" ]] && envLines+=("TXHOST_DEFAULT_ACCOUNT=$adminName:$adminId")
 
   {
@@ -720,11 +734,15 @@ PS
     printf '$env:TXHOST_DEFAULT_DBHOST = %s\n' "$(psQuote "127.0.0.1")"
     printf '$env:TXHOST_DEFAULT_DBPORT = %s\n' "$(psQuote "3306")"
     printf '$env:TXHOST_DEFAULT_DBUSER = %s\n' "$(psQuote "$dbUser")"
-    printf '$env:TXHOST_DEFAULT_DBPASS = %s\n' "$(psQuote "$dbPass")"
     printf '$env:TXHOST_DEFAULT_DBNAME = %s\n' "$(psQuote "$dbName")"
     printf '$env:TXHOST_TXA_PORT = %s\n' "$(psQuote "$txPort")"
     printf '$env:TXHOST_FXS_PORT = %s\n' "$(psQuote "$gamePort")"
     printf '$env:TXHOST_GAME_NAME = %s\n' "$(psQuote "fivem")"
+
+    # Only set a database password when there is one.
+    if [[ -n "$dbPass" ]]; then
+      printf '$env:TXHOST_DEFAULT_DBPASS = %s\n' "$(psQuote "$dbPass")"
+    fi
 
     if [[ -n "$adminName" ]]; then
       printf '$env:TXHOST_DEFAULT_ACCOUNT = %s\n' "$(psQuote "$adminName:$adminId")"
