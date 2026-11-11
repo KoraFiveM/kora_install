@@ -500,7 +500,7 @@ koraRepos=(
   kora_jewellery kora_drugs kora_cards kora_utils kora_doorlock kora_businesses
   kora_admin kora_multijob kora_bossmenu kora_multichar kora_loading kora_hud
   kora_clothing kora_banking kora_dispatch kora_fuel kora_target kora_interior
-  kora_scrapyard kora_weathersync kora_phone-stevie kora_police kora_garages kora_diving
+  kora_scrapyard kora_weathersync kora_phone kora_police kora_garages kora_diving
   kora_skills kora_dealership kora_jobcreator kora_crafting
   kora_ambulance kora_truckerjob kora_newsjob kora_truckrobbery kora_cityhall
   kora_customs kora_crypto kora_consumables kora_scoreboard kora_pawnshop
