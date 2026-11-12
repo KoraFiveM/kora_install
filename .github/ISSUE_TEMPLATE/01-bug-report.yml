@@ -1,0 +1,54 @@
+name: Bug Report
+description: Report a reproducible problem in Kora.
+title: '[Bug]: '
+labels: ['bug', 'needs-triage']
+body:
+  - type: dropdown
+    id: resource
+    attributes:
+      label: Affected component
+      options: [Core, UI, Inventory, Phone, Housing, Multicharacter, Loading, Other]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Kora version or commit
+      placeholder: Version or Git commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: '1. ...\n2. ...\n3. ...'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, screenshots or clips
+      description: Remove tokens, passwords, IP addresses and other private data before posting.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for duplicates.
+          required: true
+        - label: I removed sensitive information from my report.
+          required: true

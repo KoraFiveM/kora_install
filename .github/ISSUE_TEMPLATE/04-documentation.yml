@@ -1,0 +1,22 @@
+name: Documentation Issue
+description: Report missing, outdated or unclear documentation.
+title: '[Docs]: '
+labels: ['documentation', 'needs-triage']
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Documentation page or file
+      placeholder: URL or repository path
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is wrong or missing?
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Suggested correction

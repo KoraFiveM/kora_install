@@ -1,0 +1,35 @@
+name: Performance Issue
+description: Report high resource usage or slowdowns.
+title: '[Performance]: '
+labels: ['performance', 'needs-triage']
+body:
+  - type: input
+    id: resource
+    attributes:
+      label: Resource name
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Kora version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Performance impact
+      description: Include idle and active resmon values, FPS, latency or profiler data where available.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and profiling evidence
+      description: Include server artifacts, player count, hardware, and sanitized screenshots or logs.
