@@ -1,32 +1,36 @@
 name: Feature Request
-description: Suggest an improvement to Kora.
+description: Suggest an improvement to kora_install.
 title: '[Feature]: '
-labels: ['enhancement', 'needs-triage']
+labels:
+- enhancement
+- needs-triage
 body:
-  - type: textarea
-    id: problem
-    attributes:
-      label: What problem would this solve?
-    validations:
+- type: textarea
+  id: problem
+  attributes:
+    label: What problem would this solve?
+    description: Describe the current workflow in kora_install and where it falls short.
+  validations:
+    required: true
+- type: textarea
+  id: proposal
+  attributes:
+    label: Proposed solution
+  validations:
+    required: true
+- type: textarea
+  id: alternatives
+  attributes:
+    label: Alternatives considered
+- type: input
+  id: component
+  attributes:
+    label: Affected component (optional)
+    placeholder: For example, Server folder setup, FXServer artifacts, Resource cloning, Configuration and credentials
+- type: checkboxes
+  id: checks
+  attributes:
+    label: Checklist
+    options:
+    - label: I searched for an existing feature request.
       required: true
-  - type: textarea
-    id: proposal
-    attributes:
-      label: Proposed solution
-    validations:
-      required: true
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives considered
-  - type: input
-    id: component
-    attributes:
-      label: Related Kora resource (optional)
-  - type: checkboxes
-    id: checks
-    attributes:
-      label: Checklist
-      options:
-        - label: I searched for an existing feature request.
-          required: true

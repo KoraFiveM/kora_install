@@ -1,22 +1,26 @@
 name: Documentation Issue
-description: Report missing, outdated or unclear documentation.
+description: Report missing, outdated or unclear documentation for kora_install.
 title: '[Docs]: '
-labels: ['documentation', 'needs-triage']
+labels:
+- documentation
+- needs-triage
 body:
-  - type: input
-    id: page
-    attributes:
-      label: Documentation page or file
-      placeholder: URL or repository path
-    validations:
-      required: true
-  - type: textarea
-    id: issue
-    attributes:
-      label: What is wrong or missing?
-    validations:
-      required: true
-  - type: textarea
-    id: correction
-    attributes:
-      label: Suggested correction
+- type: input
+  id: page
+  attributes:
+    label: Documentation page or file
+    placeholder: URL or path in kora_install
+  validations:
+    required: true
+- type: textarea
+  id: issue
+  attributes:
+    label: What is wrong or missing?
+    description: Name the area that needs clarification, such as Server folder setup, FXServer artifacts, Resource cloning,
+      Configuration and credentials.
+  validations:
+    required: true
+- type: textarea
+  id: correction
+  attributes:
+    label: Suggested correction
