@@ -1,0 +1,38 @@
+name: Performance Issue
+description: Report a slowdown or high resource usage in kora_install.
+title: '[Performance]: '
+labels:
+- performance
+- needs-triage
+body:
+- type: input
+  id: resource
+  attributes:
+    label: Affected component
+    placeholder: For example, Server folder setup, FXServer artifacts, Resource cloning, Configuration and credentials
+  validations:
+    required: true
+- type: input
+  id: version
+  attributes:
+    label: kora_install version or commit
+  validations:
+    required: true
+- type: textarea
+  id: impact
+  attributes:
+    label: Performance impact
+    description: Include the affected command or step, elapsed time, workload size, and expected duration.
+  validations:
+    required: true
+- type: textarea
+  id: reproduce
+  attributes:
+    label: Steps to reproduce
+  validations:
+    required: true
+- type: textarea
+  id: environment
+  attributes:
+    label: Environment and profiling evidence
+    description: Include the OS or runner, runtime versions, and sanitized command output or logs.
